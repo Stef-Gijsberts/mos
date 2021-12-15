@@ -50,6 +50,7 @@ fn evaluate(value: Value, context: &HashMap<Name, Value>) -> Value {
                     num_params,
                     mut args,
                     apply,
+                    name,
                 }) => {
                     args.push(*arg);
 
@@ -60,6 +61,7 @@ fn evaluate(value: Value, context: &HashMap<Name, Value>) -> Value {
                             num_params,
                             args,
                             apply,
+                            name,
                         })
                     }
                 }
@@ -137,6 +139,7 @@ fn context_with_builtins() -> HashMap<Name, Value> {
     context.insert(
         "if".to_owned(),
         Value::BuiltinLambda(BuiltinLambda {
+            name: "if".to_owned(),
             apply: builtin_if,
             args: vec![],
             num_params: 3,
@@ -146,6 +149,7 @@ fn context_with_builtins() -> HashMap<Name, Value> {
     context.insert(
         "eq".to_owned(),
         Value::BuiltinLambda(BuiltinLambda {
+            name: "eq".to_owned(),
             apply: builtin_eq,
             args: vec![],
             num_params: 2,
@@ -155,6 +159,7 @@ fn context_with_builtins() -> HashMap<Name, Value> {
     context.insert(
         "add".to_owned(),
         Value::BuiltinLambda(BuiltinLambda {
+            name: "add".to_owned(),
             apply: builtin_add,
             args: vec![],
             num_params: 2,
@@ -164,6 +169,7 @@ fn context_with_builtins() -> HashMap<Name, Value> {
     context.insert(
         "mul".to_owned(),
         Value::BuiltinLambda(BuiltinLambda {
+            name: "mul".to_owned(),
             apply: builtin_mul,
             args: vec![],
             num_params: 2,
@@ -184,9 +190,7 @@ fn execute_statement(statement: Statement, context: &mut HashMap<Name, Value>) -
             None
         }
 
-        Statement::Print(value) => {
-            Some(format!("{}", evaluate(value, &context)))
-        }
+        Statement::Print(value) => Some(format!("{}", evaluate(value, &context))),
     }
 }
 
@@ -206,7 +210,7 @@ fn repl() {
 
     while let Ok(line) = rl.readline("") {
         if line == "" {
-            continue
+            continue;
         }
 
         match parser::parse_statement(&line) {
@@ -215,7 +219,7 @@ fn repl() {
                 if let Some(to_be_printed) = execute_statement(statement, &mut context) {
                     eprintln!("{}", to_be_printed.green());
                 }
-            },
+            }
             Err(e) => eprintln!("{}", format!("{}", e).red()),
         }
     }
@@ -227,7 +231,7 @@ pub fn main() {
 
         match parser::parse(&source) {
             Err(e) => eprintln!("{}", format!("{}", e).red()),
-            Ok(ast) => run(ast)
+            Ok(ast) => run(ast),
         }
     } else {
         repl();

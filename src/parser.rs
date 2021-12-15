@@ -28,11 +28,10 @@ impl<'a> fmt::Display for Error<'a> {
         match &self.0 {
             nom::Err::Error(e) => write!(f, "{}", e),
             nom::Err::Failure(e) => write!(f, "{}", e),
-            nom::Err::Incomplete(_) => write!(f, "{:?}", self.0)
+            nom::Err::Incomplete(_) => write!(f, "{:?}", self.0),
         }
     }
 }
-
 
 pub fn parse(s: &str) -> Result<Program, Error> {
     let span = Span::from(s);
@@ -41,7 +40,9 @@ pub fn parse(s: &str) -> Result<Program, Error> {
 
 pub fn parse_statement(s: &str) -> Result<Statement, Error> {
     let span = Span::from(s);
-    terminated(statement, eof)(span).map(|(_rem, res)| res).map_err(Error)
+    terminated(statement, eof)(span)
+        .map(|(_rem, res)| res)
+        .map_err(Error)
 }
 
 fn program(s: Span) -> PResult<Program> {

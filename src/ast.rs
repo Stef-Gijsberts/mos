@@ -25,6 +25,7 @@ pub enum Value {
 
 #[derive(Clone)]
 pub struct BuiltinLambda {
+    pub name: String,
     pub num_params: usize,
     pub args: Vec<Value>,
     pub apply: fn(args: Vec<Value>, context: &HashMap<Name, Value>) -> Value,
