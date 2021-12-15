@@ -109,6 +109,38 @@ fn context_with_builtins() -> HashMap<Name, Value> {
         }
     }
 
+    fn builtin_div(mut args: Vec<Value>, context: &HashMap<Name, Value>) -> Value {
+        let rval = args.pop().unwrap();
+        let lval = args.pop().unwrap();
+
+        let l = evaluate(lval, context);
+        let r = evaluate(rval, context);
+
+        if let (Value::Literal(Literal::Integer(l_int)), Value::Literal(Literal::Integer(r_int))) =
+            (l, r)
+        {
+            Value::Literal(Literal::Integer(l_int / r_int))
+        } else {
+            panic!("Div called with non-integer")
+        }
+    }
+
+    fn builtin_rem(mut args: Vec<Value>, context: &HashMap<Name, Value>) -> Value {
+        let rval = args.pop().unwrap();
+        let lval = args.pop().unwrap();
+
+        let l = evaluate(lval, context);
+        let r = evaluate(rval, context);
+
+        if let (Value::Literal(Literal::Integer(l_int)), Value::Literal(Literal::Integer(r_int))) =
+            (l, r)
+        {
+            Value::Literal(Literal::Integer(l_int % r_int))
+        } else {
+            panic!("Rem called with non-integer")
+        }
+    }
+
     fn builtin_if(mut args: Vec<Value>, context: &HashMap<Name, Value>) -> Value {
         let if_false = args.pop().unwrap();
         let if_true = args.pop().unwrap();
@@ -172,6 +204,26 @@ fn context_with_builtins() -> HashMap<Name, Value> {
         Value::BuiltinLambda(BuiltinLambda {
             name: "mul".to_owned(),
             apply: builtin_mul,
+            args: vec![],
+            num_params: 2,
+        }),
+    );
+
+    context.insert(
+        "div".to_owned(),
+        Value::BuiltinLambda(BuiltinLambda {
+            name: "div".to_owned(),
+            apply: builtin_div,
+            args: vec![],
+            num_params: 2,
+        }),
+    );
+
+    context.insert(
+        "rem".to_owned(),
+        Value::BuiltinLambda(BuiltinLambda {
+            name: "rem".to_owned(),
+            apply: builtin_rem,
             args: vec![],
             num_params: 2,
         }),
