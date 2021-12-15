@@ -1,0 +1,15 @@
+decr = (add -1)
+decr2 = (add -2)
+
+or = \l -> \r -> (if l l r)
+and = \l -> \r -> (if l r l)
+
+fib = \n -> (
+    if (or (eq n 1) (eq n 2))
+        n
+        (add (fib (decr n)) (fib (decr2 n)))
+    )
+
+power = \x -> \y -> (if (eq y 0) 1 (mul (power x (decr y) x)))
+
+(power 2)
