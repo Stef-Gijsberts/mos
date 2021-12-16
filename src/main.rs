@@ -258,8 +258,12 @@ fn run(program: Program) {
 }
 
 fn repl() {
+    let history_path = dirs::home_dir().unwrap().join(".moshistory");
+
     let mut context = context_with_builtins();
     let mut rl = rustyline::Editor::<()>::new();
+
+    rl.load_history(&history_path);
 
     while let Ok(line) = rl.readline("") {
         if line == "" {
@@ -276,6 +280,9 @@ fn repl() {
             Err(e) => eprintln!("{}", format!("{}", e).red()),
         }
     }
+
+
+    rl.save_history(&history_path).unwrap();
 }
 
 pub fn main() {
