@@ -270,9 +270,10 @@ fn repl() {
             continue;
         }
 
+        rl.add_history_entry(line.as_str());
+
         match parser::parse_statement(&line) {
             Ok(statement) => {
-                rl.add_history_entry(line.as_str());
                 if let Some(to_be_printed) = execute_statement(statement, &mut context) {
                     eprintln!("{}", to_be_printed.green());
                 }
