@@ -40,8 +40,8 @@ fn evaluate(value: Value, context: &HashMap<Name, Value>) -> Value {
     match value {
         Value::Reference(ref name) => match context.get(name) {
             Some(referent) => evaluate(referent.clone(), context),
-            // None => value,
-            None => panic!("Value with name '{}' does not exist in the context", name)
+            None => value,
+            // None => panic!("Value with name '{}' does not exist in the context", name)
         },
         Value::Apply(f, arg) => {
             let ev_f = evaluate(*f, context);

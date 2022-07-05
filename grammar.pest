@@ -1,0 +1,20 @@
+program = { SOI ~ (statement ~ ";")* ~ EOI }
+statement = { bind | print }
+
+bind = { name ~ "=" ~ lambda }
+
+print = { "print" ~ lambda }
+
+lambda = { "\\" ~ name ~ "->" ~ lambda | application }
+name = { identifier }
+
+application = { "(" ~ (application | reference)+ ~ ")" | reference }
+
+reference = { literal | identifier }
+
+literal = { number | string }
+number = @{ ASCII_DIGIT+ }
+string = @{ "\"" ~ ^"\""* ~ "\"" }
+
+identifier = @{ ASCII_ALPHA+ }
+WHITESPACE = _{ " " | "\n" }
