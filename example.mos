@@ -10,6 +10,28 @@ fib = \n -> (
         (add (fib (decr n)) (fib (decr2 n)))
     )
 
-power = \x -> \y -> (if (eq y 0) 1 (mul (power x (decr y) x)))
+("power function")
+power = \x -> \y -> (if (eq y 0) 1 (mul (power x (decr y)) x))
+(power)
 
-(power 2)
+twoPower = (power 2)
+
+("Two to power n")
+(twoPower)
+
+("Two to power 5")
+(twoPower 5)
+
+("function to flip: applies curried function with 2 args in reverse order")
+flip = \f -> \l -> \r -> (f r l)
+(flip)
+
+("square function")
+square = ((flip power) 2)
+(square)
+
+("5 squared")
+(square 5)
+
+("10 squared")
+(square 10)
